@@ -11,5 +11,13 @@ Boosting Models: Catboost, Xgboost
 ## Tools Used:
 Hydra: A framework for elegantly configuring complex applications
 
+## To run on OSC's Ondemand [https://ondemand.osc.edu/pun/sys/dashboard/batch_connect/sessions] Cluster: 
+1. Go to Pitzer Cluster
+2. Go to the project directory
+3. Run using `./scripts/job_run.sh`
+
+
+
+
 
 
