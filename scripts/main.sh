@@ -25,7 +25,15 @@ source activate hpo #replace
 # python ./my_app.py hydra.mode=MULTIRUN framework=optuna dataset=eye_movement sampler=tpe algorithm=catboost,xgboost > ./justin.txt
 # srun python ./my_app.py hydra.mode=MULTIRUN framework=hyperopt dataset=gas-concentration sampler=tpe algorithm=catboost > ./gas_new_2.txt
 
-##
+##LGBM Algorithm
 #srun python ./my_app.py hydra.mode=MULTIRUN framework=optuna dataset=eye_movement sampler=tpe algorithm=lightgbm > ./eye_movement_lgbm.txt
-srun python ./my_app.py hydra.mode=MULTIRUN framework=hyperopt dataset=eye_movement sampler=rand,tpe algorithm=lightgbm > ./eye_movement_lgbm1.txt
+#srun python ./my_app.py hydra.mode=MULTIRUN framework=hyperopt dataset=eye_movement sampler=rand,tpe algorithm=lightgbm > ./eye_movement_lgbm1.txt
 
+srun python ./my_app.py hydra.mode=MULTIRUN framework=optuna dataset=gas-concentration sampler=rand,tpe algorithm=lightgbm > ./gas-concentration_lgbm_optuna.txt
+srun python ./my_app.py hydra.mode=MULTIRUN framework=hyperopt dataset=gas-concentration sampler=rand,tpe algorithm=lightgbm > ./gas-concentration_lgbm_hyperopt.txt
+
+srun python ./my_app.py hydra.mode=MULTIRUN framework=optuna dataset=airlines sampler=rand,tpe algorithm=lightgbm > ./airlines_lgbm_optuna.txt
+srun python ./my_app.py hydra.mode=MULTIRUN framework=hyperopt dataset=airlines sampler=rand,tpe algorithm=lightgbm > ./airlines_lgbm_hyperopt.txt
+
+srun python ./my_app.py hydra.mode=MULTIRUN framework=optuna dataset=gesture-phase sampler=rand,tpe algorithm=lightgbm > ./gesture-phase_lgbm_optuna.txt
+srun python ./my_app.py hydra.mode=MULTIRUN framework=hyperopt dataset=gesture-phase sampler=rand,tpe algorithm=lightgbm > ./gesture-phase_lgbm_hyperopt.txt
