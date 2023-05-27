@@ -5,9 +5,9 @@
 #SBATCH --time=6:00:00
 #SBATCH --cpus-per-task 40
 #SBATCH -J diffneighb
-##SBATCH -o prativa-%j.out #replace
+##SBATCH -o sputha -%j.out #replace
 #SBATCH --mail-type=END
-#SBATCH --mail-user=ppokhrel03@student.ysu.edu #replace
+#SBATCH --mail-user=sputha@student.ysu.edu #replace
 
 
 module load miniconda3/4.10.3-py37
@@ -26,4 +26,6 @@ source activate hpo #replace
 # srun python ./my_app.py hydra.mode=MULTIRUN framework=hyperopt dataset=gas-concentration sampler=tpe algorithm=catboost > ./gas_new_2.txt
 
 ##
-srun python ./my_app.py hydra.mode=MULTIRUN framework=optuna dataset=eye_movement sampler=tpe algorithm=lightgbm > ./eye_movement_lgbm.txt
+#srun python ./my_app.py hydra.mode=MULTIRUN framework=optuna dataset=eye_movement sampler=tpe algorithm=lightgbm > ./eye_movement_lgbm.txt
+srun python ./my_app.py hydra.mode=MULTIRUN framework=hyperopt dataset=eye_movement sampler=rand,tpe algorithm=lightgbm > ./eye_movement_lgbm1.txt
+
