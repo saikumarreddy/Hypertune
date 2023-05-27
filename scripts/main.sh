@@ -11,7 +11,8 @@
 
 
 module load miniconda3/4.10.3-py37
-source activate autoTPred #replace
+source activate hpo #replace
+#source activate autoTPred #replace
 ## srun python ./eye_movement.py callbacks=default datamodule.loader="neighbor" datamodule.neighb=5 > eye_movement_output.txt
 
 # srun python ./Hyperopt/random/Catboost/eye_movement_random.py callbacks=default datamodule.loader="neighbor" datamodule.neighb=5 > ./Hyperopt/random/Catboost/eye_movement_random_output.txt
