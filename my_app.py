@@ -296,7 +296,7 @@ def main(cfg: DictConfig) -> None:
         
     iter_score = pd.DataFrame({'iteration': iteration_list, 'Accuracy': score_list})
     iter_score = iter_score.reset_index(drop=True)
-    path = "/users/PLS0150/prativa/AutoML_Frameworks/hydra/hyperopt-optuna/plots"
+    path = "/users/PLS0151/sputha/Hypertune/plots"
     iter_score.to_csv(os.path.join(path, cfg.dataset.name +  "_" + cfg.algorithm.nickname + "_" + cfg.framework.name + "_" + cfg.sampler.name + ".csv"), index=False)
 
 if __name__ == "__main__":
