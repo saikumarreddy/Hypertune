@@ -22,5 +22,8 @@ source activate hpo #replace
 # srun python ./my_app.py hydra.mode=MULTIRUN framework=hyperopt dataset=gas-concentration sampler=rand,tpe algorithm=xgboost,catboost > ./gas-concentration-rest.txt
 
 
-srun python ./my_app.py hydra.mode=MULTIRUN framework=optuna dataset=eye_movement sampler=tpe algorithm=catboost,xgboost > ./justin.txt
+# python ./my_app.py hydra.mode=MULTIRUN framework=optuna dataset=eye_movement sampler=tpe algorithm=catboost,xgboost > ./justin.txt
 # srun python ./my_app.py hydra.mode=MULTIRUN framework=hyperopt dataset=gas-concentration sampler=tpe algorithm=catboost > ./gas_new_2.txt
+
+##
+srun python ./my_app.py hydra.mode=MULTIRUN framework=optuna dataset=eye_movement sampler=tpe algorithm=lightgbm > ./eye_movement_lgbm.txt
