@@ -8,6 +8,8 @@ import hyperopt
 from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
 from hyperopt.plotting import main_plot_history
 import optuna
+import wandb
+from optuna.integration.wandb import WeightsAndBiasesCallback
 from optuna.samplers import RandomSampler,TPESampler
 
 import catboost 
@@ -139,7 +141,6 @@ def main(cfg: DictConfig) -> None:
                 else:
                     param['objective'] = "binary"
 
-        
         def hyperparameter_tuning(param):
            
             model = classifier_model(cfg.algorithm.name, cfg.dataset.name, param)
@@ -163,19 +164,22 @@ def main(cfg: DictConfig) -> None:
                     algo=algoithm.suggest,
                     space=param,
                     max_evals=max_evals,
-                    trials=trials)
-        time_taken_total = time.time()-t0
+                    trials=trials
+                   )
         
 #         accuracy_scores.append(min(trials.losses()))
 #         timings.append(time_taken_total/60)
         best_params = hyperopt.space_eval(param, best)
-        
-        log.info("------ BEST VALUE -------")
-        log.info(min(trials.losses()))
-        
+        best_loss = trials.best_trial['result']['loss']
+        #best_accuracy = trials.best_trial['result']['accuracy']
+  
         time_taken_total = time.time()-t0
         log.info("---TOTAL TIME TAKEN--- = ")
         log.info(time_taken_total/60)
+
+        log.info("------ BEST VALUE -------")
+        log.info(min(trials.losses()))
+        
         
         log.info("-----PARAMS-----")
         best_params = hyperopt.space_eval(param, best)
@@ -194,6 +198,11 @@ def main(cfg: DictConfig) -> None:
         
     #OPTUNA
     else:
+        # wandb.init(project="Optuna",entity="saikumarreddy1101",reinit=True,)
+        wandb_kwargs = {"project": "optuna1","entity": "saikumarreddy1101","reinit": True,}
+        wandbc = WeightsAndBiasesCallback(metric_name="accuracy", wandb_kwargs=wandb_kwargs,as_multirun=True)
+        
+        @wandbc.track_in_wandb() #decorator to log wandb inside objective function
         def objective(trial):
             if(cfg.algorithm.name == "CatBoostClassifier"):
 
@@ -256,10 +265,14 @@ def main(cfg: DictConfig) -> None:
             log.info("-----validation accuracy----")
             log.info(accuracy)
             
+            wandb.log({"accuracy": accuracy})
+            
             iteration_list.append(index_list[-1])
             score_list.append(accuracy)
             index_list.append(index_list[-1] +1)
             return accuracy
+          
+
         
         t0 = time.time()
         if(cfg.sampler.name == "tpe"):
@@ -280,6 +293,25 @@ def main(cfg: DictConfig) -> None:
         log.info(" --- PARAMS -----")
         best_params = study.best_params
         log.info(study.best_params)
+        
+        f = "best_{}".format
+        for param_name, param_value in study.best_trial.params.items():
+            wandb.run.summary[f(param_name)] = param_value
+
+        wandb.run.summary["best accuracy"] = study.best_trial.value
+        wandb.log(
+            {
+                "optuna_optimization_history": optuna.visualization.plot_optimization_history(
+                    study
+                ),
+                "optuna_param_importances": optuna.visualization.plot_param_importances(
+                    study
+                ),
+            }
+            
+        )    
+        # Finish Wandb run
+        wandb.finish()
         
         model = classifier_model(cfg.algorithm.name, cfg.dataset.name, best_params)
         model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=False)
